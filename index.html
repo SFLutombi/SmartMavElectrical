@@ -44,21 +44,23 @@
   ───────────────────────────────────── */
   nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    background: var(--navy);
+    background: #ffffff;
     padding: 0 5vw;
     height: 60px;
     display: flex; align-items: center; justify-content: space-between;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 1px 12px rgba(0,0,0,0.06);
   }
   .nav-brand {
     font-family: 'Syne', sans-serif;
     font-weight: 700;
     font-size: clamp(0.88rem, 3.5vw, 1.1rem);
-    color: var(--white);
+    color: var(--navy);
     letter-spacing: -0.01em;
     white-space: nowrap;
   }
-  .nav-brand span { color: var(--yellow); }
+  .nav-brand-main  { color: var(--navy); }
+  .nav-brand-accent { color: var(--yellow); }
   .nav-cta {
     background: var(--yellow);
     color: var(--navy);
@@ -105,12 +107,57 @@
     background: var(--yellow);
     opacity: 0.6;
   }
-  .hero-inner { position: relative; z-index: 1; width: 100%; max-width: 860px; }
+  .hero-inner {
+    position: relative; z-index: 1; width: 100%;
+    display: flex; align-items: center;
+    gap: 48px;
+  }
+  .hero-content { flex: 1 1 0; min-width: 0; max-width: 520px; }
+  .hero-image-col {
+    flex: 0 0 40%;
+    max-width: 460px;
+    align-self: stretch;
+    position: relative;
+    overflow: hidden;
+    min-height: 420px;
+    margin-left: auto;
+  }
+  .hero-image-col img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center top;
+  }
+  .hero-image-col::before {
+    content: '';
+    position: absolute; top: 0; left: 0;
+    width: 4px; height: 60px;
+    background: var(--yellow);
+    z-index: 2;
+  }
+  /* Dark gradient overlay on the image */
+  .hero-image-col::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(15,23,42,0.45) 0%,
+      rgba(15,23,42,0.15) 60%,
+      rgba(15,23,42,0.35) 100%
+    );
+    z-index: 1;
+    pointer-events: none;
+  }
 
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
 
-  .hero-typed { color: var(--yellow); }
+  .hero-typed {
+    color: var(--yellow);
+    display: inline-block;
+    min-width: 6ch;        /* wide enough for the longest word */
+    vertical-align: bottom;
+  }
   .hero-typed::after {
     content: '|';
     color: var(--yellow);
@@ -489,6 +536,25 @@
   ───────────────────────────────────── */
   @media (max-width: 900px) {
     .hero::after { display: none; }
+    /* Hide image column on tablet/mobile — use background instead */
+    .hero-image-col { display: none; }
+    .hero-mobile-bg {
+      position: absolute; inset: 0;
+      background-image: url('hero.webp');
+      background-size: cover;
+      background-position: center top;
+      z-index: 0;
+    }
+    .hero-mobile-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(15,23,42,0.82) 0%,
+        rgba(15,23,42,0.70) 60%,
+        rgba(15,23,42,0.88) 100%
+      );
+    }
     .process-steps { grid-template-columns: 1fr; }
     .step-connector { display: none; }
     .work-grid {
@@ -572,32 +638,38 @@
 
 <!-- NAV -->
 <nav>
-  <div class="nav-brand">Smart Mav<span>.</span> Electrical</div>
+  <div class="nav-brand"><span class="nav-brand-main">Smart Mav.</span> <span class="nav-brand-accent">Electrical</span></div>
   <a href="https://wa.me/27680599197" class="nav-cta" target="_blank" rel="noopener">WhatsApp Us</a>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
+  <div class="hero-mobile-bg"></div>
   <div class="hero-inner">
-    <h1><span id="typed-word" class="hero-typed">Reliable</span> electrical work,<br><em>done properly.</em></h1>
-    <p class="hero-sub">From small repairs to full installations — across Cape Town. We show up, we work safely, and we get it right.</p>
-    <div class="hero-actions">
-      <a href="https://wa.me/27680599197" class="btn-primary" target="_blank" rel="noopener">Message on WhatsApp</a>
-      <a href="tel:0680599197" class="btn-secondary">Call 068 059 9197</a>
+    <div class="hero-content">
+      <h1><span id="typed-word" class="hero-typed">Reliable</span> electrical work,<br><em>done properly.</em></h1>
+      <p class="hero-sub">From small repairs to full installations — across Cape Town. We show up, we work safely, and we get it right.</p>
+      <div class="hero-actions">
+        <a href="https://wa.me/27680599197" class="btn-primary" target="_blank" rel="noopener">Message on WhatsApp</a>
+        <a href="tel:0680599197" class="btn-secondary">Call 068 059 9197</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-num">24/7</div>
+          <div class="stat-label">Always available</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">CPT</div>
+          <div class="stat-label">Cape Town wide</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">5+</div>
+          <div class="stat-label">Services offered</div>
+        </div>
+      </div>
     </div>
-    <div class="hero-stats">
-      <div class="stat-item">
-        <div class="stat-num">24/7</div>
-        <div class="stat-label">Always available</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-num">CPT</div>
-        <div class="stat-label">Cape Town wide</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-num">5+</div>
-        <div class="stat-label">Services offered</div>
-      </div>
+    <div class="hero-image-col">
+      <img src="hero1.webp" alt="Smart Mav Electrical – professional electrician at work" />
     </div>
   </div>
 </section>
