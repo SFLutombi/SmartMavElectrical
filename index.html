@@ -84,15 +84,30 @@
   ───────────────────────────────────── */
   .hero {
     background: var(--navy);
+    background-image: url('hero.jpg');
+    background-size: cover;
+    background-position: center center;
     min-height: 100svh;
     display: flex; align-items: center;
     padding: 100px 6vw 72px;
     position: relative;
     overflow: hidden;
   }
+  /* Dark gradient so text stays readable */
   .hero::before {
     content: '';
     position: absolute; inset: 0;
+    background: linear-gradient(
+      to right,
+      rgba(15,23,42,0.92) 0%,
+      rgba(15,23,42,0.75) 50%,
+      rgba(15,23,42,0.45) 100%
+    );
+    z-index: 0;
+  }
+  /* Grid overlay on top of gradient */
+  .hero-grid-overlay {
+    position: absolute; inset: 0; z-index: 0;
     background-image:
       linear-gradient(rgba(250,204,21,0.04) 1px, transparent 1px),
       linear-gradient(90deg, rgba(250,204,21,0.04) 1px, transparent 1px);
@@ -112,42 +127,7 @@
     display: flex; align-items: center;
     gap: 48px;
   }
-  .hero-content { flex: 1 1 0; min-width: 0; max-width: 520px; }
-  .hero-image-col {
-    flex: 0 0 40%;
-    max-width: 460px;
-    align-self: stretch;
-    position: relative;
-    overflow: hidden;
-    min-height: 420px;
-    margin-left: auto;
-  }
-  .hero-image-col img {
-    position: absolute; inset: 0;
-    width: 100%; height: 100%;
-    object-fit: cover;
-    object-position: center top;
-  }
-  .hero-image-col::before {
-    content: '';
-    position: absolute; top: 0; left: 0;
-    width: 4px; height: 60px;
-    background: var(--yellow);
-    z-index: 2;
-  }
-  /* Dark gradient overlay on the image */
-  .hero-image-col::after {
-    content: '';
-    position: absolute; inset: 0;
-    background: linear-gradient(
-      135deg,
-      rgba(15,23,42,0.45) 0%,
-      rgba(15,23,42,0.15) 60%,
-      rgba(15,23,42,0.35) 100%
-    );
-    z-index: 1;
-    pointer-events: none;
-  }
+  .hero-content { flex: 1 1 0; min-width: 0; max-width: 580px; }
 
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
@@ -536,24 +516,9 @@
   ───────────────────────────────────── */
   @media (max-width: 900px) {
     .hero::after { display: none; }
-    /* Hide image column on tablet/mobile — use background instead */
-    .hero-image-col { display: none; }
-    .hero-mobile-bg {
-      position: absolute; inset: 0;
+    /* On mobile override the background image with the mobile version */
+    .hero {
       background-image: url('hero.webp');
-      background-size: cover;
-      background-position: center top;
-      z-index: 0;
-    }
-    .hero-mobile-bg::after {
-      content: '';
-      position: absolute; inset: 0;
-      background: linear-gradient(
-        to bottom,
-        rgba(15,23,42,0.82) 0%,
-        rgba(15,23,42,0.70) 60%,
-        rgba(15,23,42,0.88) 100%
-      );
     }
     .process-steps { grid-template-columns: 1fr; }
     .step-connector { display: none; }
@@ -645,6 +610,7 @@
 <!-- HERO -->
 <section class="hero">
   <div class="hero-mobile-bg"></div>
+  <div class="hero-grid-overlay"></div>
   <div class="hero-inner">
     <div class="hero-content">
       <h1><span id="typed-word" class="hero-typed">Reliable</span> electrical work,<br><em>done properly.</em></h1>
@@ -667,9 +633,6 @@
           <div class="stat-label">Services offered</div>
         </div>
       </div>
-    </div>
-    <div class="hero-image-col">
-      <img src="hero1.webp" alt="Smart Mav Electrical – professional electrician at work" />
     </div>
   </div>
 </section>
